@@ -1,0 +1,452 @@
+'Автоматизация системы алкотестирования на ПАК Apacs 3000 СС Метиз
+'КПП№2
+'Необходимо скорректировати имена считывателей и AUX входов на Apollo.
+'Версия 1.0.1
+dim strNameKPP2s1
+dim dwCardKPP2s1
+dim strInitKPP2s1
+dim ObjKPP2s1
+
+dim strNameKPP2s2
+dim dwCardKPP2s2
+dim strInitKPP2s2
+dim ObjKPP2s2
+
+dim strNameKPP2s3
+dim dwCardKPP2s3
+dim strInitKPP2s3
+dim ObjKPP2s3
+
+dim strNameKPP2s4
+dim dwCardKPP2s4
+dim strInitKPP2s4
+dim ObjKPP2s4
+
+dim strNameKPP2s5
+dim dwCardKPP2s5
+dim strInitKPP2s5
+dim ObjKPP2s5
+
+dim strNameKPP2s6
+dim dwCardKPP2s6
+dim strInitKPP2s6
+dim ObjKPP2s6
+
+dim strNameKPP2s7
+dim dwCardKPP2s7
+dim strInitKPP2s7
+dim ObjKPP2s7
+
+dim strNameKPP2s8
+dim dwCardKPP2s8
+dim strInitKPP2s8
+dim ObjKPP2s8
+
+dim strNameKPP2s9
+dim dwCardKPP2s9
+dim strInitKPP2s9
+dim ObjKPP2s9
+
+dim strNameKPP2s10
+dim dwCardKPP2s10
+dim strInitKPP2s10
+dim ObjKPP2s10
+
+dim strNameKPP2s11
+dim dwCardKPP2s11
+dim strInitKPP2s11
+dim ObjKPP2s11
+
+dim strNameKPP2s12
+dim dwCardKPP2s12
+dim strInitKPP2s12
+dim ObjKPP2s12
+
+sub Apacs_Event(Evt)
+
+'Кпп2 Считыватель 1
+If Evt.strEventTypeID="TApcCardHolderAccess_WillGranted" AND Evt.strInitObjName = "Вход с алкотестером" Then
+	strInitKPP2s1 = Evt.strInitObjName
+	strNameKPP2s1 = Evt.strHolderName
+	dwCardKPP2s1  = Evt.dwCardNumber
+	set ObjKPP2s1 = Evt.SysAddrInitObj
+end if
+If Evt.strEventTypeID = "TAplMCEventStatusChangeLog_AlarmInputAct" AND Evt.strInitObjName = "Вход с алкотестером - Дополнительный вход №1"   Then
+	if strNameKPP2s1 <> "" then
+'Обнаружение алкоголя в выдохе, начало формирования сообщения.
+		If ObjKPP2s1.getEventSettingsForRegister("TApcCardHolderAccess_HostAccReq", prop)  <> 0 Then
+			Client.writeToLog "Ошибка получения настроек сообщения для регистрации"
+		Else
+			prop.isOffLineEvent =false
+			prop.dwCardNumber = dwCardKPP2s1
+			prop.strHolderName = strNameKPP2s1
+			prop.strPIN = "алкоголь"
+			If ObjKPP2s1.registerEventWithSettings(prop) <> 0 Then
+				Client.writeToLog "Ошибка регистрации сообщения"
+			Else
+				'msgbox "Новое сообщение зарегестрированно"
+				msgbox "Обнаружен алкоголь у "+strNameKPP2s1+" на объекте "+strInitKPP2s1
+				
+			End If
+		End If
+	end if
+'обнуление переменных
+	strInitKPP2s1 = ""
+	strNameKPP2s1 = ""
+	dwCardKPP2s1  = 0
+	set ObjKPP2s1 = Nothing
+end if
+
+'КПП2 Считыватель 2 Выход с алкоголем
+If Evt.strEventTypeID="TApcCardHolderAccess_WillGranted" AND Evt.strInitObjName = "Выход с алкотестером" Then
+	strInitKPP2s2 = Evt.strInitObjName
+	strNameKPP2s2 = Evt.strHolderName
+	dwCardKPP2s2  = Evt.dwCardNumber
+	set ObjKPP2s2 = Evt.SysAddrInitObj
+end if
+If Evt.strEventTypeID = "TAplMCEventStatusChangeLog_AlarmInputAct" AND Evt.strInitObjName = "Выход с алкотестером - Дополнительный вход №1"   Then
+	if strNameKPP2s2 <> "" then
+'Обнаружение алкоголя в выдохе, начал формирования сообщения.
+		If ObjKPP2s2.getEventSettingsForRegister("TApcCardHolderAccess_HostAccReq", prop)  <> 0 Then
+			Client.writeToLog "Ошибка получения настроек сообщения для регистрации"
+		Else
+			prop.isOffLineEvent =false
+			prop.dwCardNumber = dwCardKPP2s2
+			prop.strHolderName = strNameKPP2s2
+			prop.strPIN = "алкоголь"
+			If ObjKPP2s2.registerEventWithSettings(prop) <> 0 Then
+				Client.writeToLog "Ошибка регистрации сообщения"
+			Else
+				'msgbox "Новое сообщение зарегестрированно"
+				msgbox "Обнаружен алкоголь у "+strNameKPP2s2+" на объекте "+strInitKPP2s2
+			End If
+		End If
+	end if
+'обнуление переменных
+	strInitKPP2s2 = ""
+	strNameKPP2s2 = ""
+	dwCardKPP2s2  = 0
+	set ObjKPP2s2 = Nothing
+end if
+
+'КПП2 Считыватель 3 Вход с алкоголем 2
+If Evt.strEventTypeID="TApcCardHolderAccess_WillGranted" AND Evt.strInitObjName = "Выход с алкотестером" Then
+	strInitKPP2s3 = Evt.strInitObjName
+	strNameKPP2s3 = Evt.strHolderName
+	dwCardKPP2s3  = Evt.dwCardNumber
+	set ObjKPP2s3 = Evt.SysAddrInitObj
+end if
+If Evt.strEventTypeID = "TAplMCEventStatusChangeLog_AlarmInputAct" AND Evt.strInitObjName = "Выход с алкотестером - Дополнительный вход №1"   Then
+	if strNameKPP2s3 <> "" then
+'Обнаружение алкоголя в выдохе, начал формирования сообщения.
+		If ObjKPP2s3.getEventSettingsForRegister("TApcCardHolderAccess_HostAccReq", prop)  <> 0 Then
+			Client.writeToLog "Ошибка получения настроек сообщения для регистрации"
+		Else
+			prop.isOffLineEvent =false
+			prop.dwCardNumber = dwCardKPP2s3
+			prop.strHolderName = strNameKPP2s3
+			prop.strPIN = "алкоголь"
+			If ObjKPP2s3.registerEventWithSettings(prop) <> 0 Then
+				Client.writeToLog "Ошибка регистрации сообщения"
+			Else
+				'msgbox "Новое сообщение зарегестрированно"
+				msgbox "Обнаружен алкоголь у "+strNameKPP2s3+" на объекте "+strInitKPP2s3
+			End If
+		End If
+	end if
+'обнуление переменных
+	strInitKPP2s3 = ""
+	strNameKPP2s3 = ""
+	dwCardKPP2s3  = 0
+	set ObjKPP2s3 = Nothing
+end if
+
+'КПП2 Считыватель 4 Выход с алкоголем 2
+If Evt.strEventTypeID="TApcCardHolderAccess_WillGranted" AND Evt.strInitObjName = "Выход с алкотестером" Then
+	strInitKPP2s4 = Evt.strInitObjName
+	strNameKPP2s4 = Evt.strHolderName
+	dwCardKPP2s4  = Evt.dwCardNumber
+	set ObjKPP2s4 = Evt.SysAddrInitObj
+end if
+If Evt.strEventTypeID = "TAplMCEventStatusChangeLog_AlarmInputAct" AND Evt.strInitObjName = "Выход с алкотестером - Дополнительный вход №1"   Then
+	if strNameKPP2s4 <> "" then
+'Обнаружение алкоголя в выдохе, начал формирования сообщения.
+		If ObjKPP2s4.getEventSettingsForRegister("TApcCardHolderAccess_HostAccReq", prop)  <> 0 Then
+			Client.writeToLog "Ошибка получения настроек сообщения для регистрации"
+		Else
+			prop.isOffLineEvent =false
+			prop.dwCardNumber = dwCardKPP2s4
+			prop.strHolderName = strNameKPP2s4
+			prop.strPIN = "алкоголь"
+			If ObjKPP2s4.registerEventWithSettings(prop) <> 0 Then
+				Client.writeToLog "Ошибка регистрации сообщения"
+			Else
+				'msgbox "Новое сообщение зарегестрированно"
+				msgbox "Обнаружен алкоголь у "+strNameKPP2s4+" на объекте "+strInitKPP2s4
+			End If
+		End If
+	end if
+'обнуление переменных
+	strInitKPP2s4 = ""
+	strNameKPP2s4 = ""
+	dwCardKPP2s4  = 0
+	set ObjKPP2s4 = Nothing
+end if
+
+'КПП2 Считыватель 5 Вход с алкоголем 3
+If Evt.strEventTypeID="TApcCardHolderAccess_WillGranted" AND Evt.strInitObjName = "Выход с алкотестером" Then
+	strInitKPP2s5 = Evt.strInitObjName
+	strNameKPP2s5 = Evt.strHolderName
+	dwCardKPP2s5  = Evt.dwCardNumber
+	set ObjKPP2s5 = Evt.SysAddrInitObj
+end if
+If Evt.strEventTypeID = "TAplMCEventStatusChangeLog_AlarmInputAct" AND Evt.strInitObjName = "Выход с алкотестером - Дополнительный вход №1"   Then
+	if strNameKPP2s5 <> "" then
+'Обнаружение алкоголя в выдохе, начал формирования сообщения.
+		If ObjKPP2s5.getEventSettingsForRegister("TApcCardHolderAccess_HostAccReq", prop)  <> 0 Then
+			Client.writeToLog "Ошибка получения настроек сообщения для регистрации"
+		Else
+			prop.isOffLineEvent =false
+			prop.dwCardNumber = dwCardKPP2s5
+			prop.strHolderName = strNameKPP2s5
+			prop.strPIN = "алкоголь"
+			If ObjKPP2s5.registerEventWithSettings(prop) <> 0 Then
+				Client.writeToLog "Ошибка регистрации сообщения"
+			Else
+				'msgbox "Новое сообщение зарегестрированно"
+				msgbox "Обнаружен алкоголь у "+strNameKPP2s5+" на объекте "+strInitKPP2s5
+			End If
+		End If
+	end if
+'обнуление переменных
+	strInitKPP2s5 = ""
+	strNameKPP2s5 = ""
+	dwCardKPP2s5  = 0
+	set ObjKPP2s5 = Nothing
+end if
+
+'КПП1 Считыватель 6 Выход с алкоголем 3
+If Evt.strEventTypeID="TApcCardHolderAccess_WillGranted" AND Evt.strInitObjName = "Выход с алкотестером" Then
+	strInitKPP2s6 = Evt.strInitObjName
+	strNameKPP2s6 = Evt.strHolderName
+	dwCardKPP2s6  = Evt.dwCardNumber
+	set ObjKPP2s6 = Evt.SysAddrInitObj
+end if
+If Evt.strEventTypeID = "TAplMCEventStatusChangeLog_AlarmInputAct" AND Evt.strInitObjName = "Выход с алкотестером - Дополнительный вход №1"   Then
+	if strNameKPP2s6 <> "" then
+'Обнаружение алкоголя в выдохе, начал формирования сообщения.
+		If ObjKPP2s6.getEventSettingsForRegister("TApcCardHolderAccess_HostAccReq", prop)  <> 0 Then
+			Client.writeToLog "Ошибка получения настроек сообщения для регистрации"
+		Else
+			prop.isOffLineEvent =false
+			prop.dwCardNumber = dwCardKPP2s6
+			prop.strHolderName = strNameKPP2s6
+			prop.strPIN = "алкоголь"
+			If ObjKPP2s6.registerEventWithSettings(prop) <> 0 Then
+				Client.writeToLog "Ошибка регистрации сообщения"
+			Else
+				'msgbox "Новое сообщение зарегестрированно"
+				msgbox "Обнаружен алкоголь у "+strNameKPP2s6+" на объекте "+strInitKPP2s6
+			End If
+		End If
+	end if
+'обнуление переменных
+	strInitKPP2s6 = ""
+	strNameKPP2s6 = ""
+	dwCardKPP2s6  = 0
+	set ObjKPP2s6 = Nothing
+end if
+
+'Кпп2 Считыватель 7
+If Evt.strEventTypeID="TApcCardHolderAccess_WillGranted" AND Evt.strInitObjName = "Вход с алкотестером" Then
+	strInitKPP2s7 = Evt.strInitObjName
+	strNameKPP2s7 = Evt.strHolderName
+	dwCardKPP2s7  = Evt.dwCardNumber
+	set ObjKPP2s7 = Evt.SysAddrInitObj
+end if
+If Evt.strEventTypeID = "TAplMCEventStatusChangeLog_AlarmInputAct" AND Evt.strInitObjName = "Вход с алкотестером - Дополнительный вход №1"   Then
+	if strNameKPP2s7 <> "" then
+'Обнаружение алкоголя в выдохе, начало формирования сообщения.
+		If ObjKPP2s7.getEventSettingsForRegister("TApcCardHolderAccess_HostAccReq", prop)  <> 0 Then
+			Client.writeToLog "Ошибка получения настроек сообщения для регистрации"
+		Else
+			prop.isOffLineEvent =false
+			prop.dwCardNumber = dwCardKPP2s7
+			prop.strHolderName = strNameKPP2s7
+			prop.strPIN = "алкоголь"
+			If ObjKPP2s7.registerEventWithSettings(prop) <> 0 Then
+				Client.writeToLog "Ошибка регистрации сообщения"
+			Else
+				'msgbox "Новое сообщение зарегестрированно"
+				msgbox "Обнаружен алкоголь у "+strNameKPP2s7+" на объекте "+strInitKPP2s7
+			End If
+		End If
+	end if
+'обнуление переменных
+	strInitKPP2s7 = ""
+	strNameKPP2s7 = ""
+	dwCardKPP2s7  = 0
+	set ObjKPP2s7 = Nothing
+end if
+
+'Кпп2 Считыватель 8
+If Evt.strEventTypeID="TApcCardHolderAccess_WillGranted" AND Evt.strInitObjName = "Вход с алкотестером" Then
+	strInitKPP2s8 = Evt.strInitObjName
+	strNameKPP2s8 = Evt.strHolderName
+	dwCardKPP2s8  = Evt.dwCardNumber
+	set ObjKPP2s8 = Evt.SysAddrInitObj
+end if
+If Evt.strEventTypeID = "TAplMCEventStatusChangeLog_AlarmInputAct" AND Evt.strInitObjName = "Вход с алкотестером - Дополнительный вход №1"   Then
+	if strNameKPP2s8 <> "" then
+'Обнаружение алкоголя в выдохе, начало формирования сообщения.
+		If ObjKPP2s8.getEventSettingsForRegister("TApcCardHolderAccess_HostAccReq", prop)  <> 0 Then
+			Client.writeToLog "Ошибка получения настроек сообщения для регистрации"
+		Else
+			prop.isOffLineEvent =false
+			prop.dwCardNumber = dwCardKPP2s8
+			prop.strHolderName = strNameKPP2s8
+			prop.strPIN = "алкоголь"
+			If ObjKPP2s8.registerEventWithSettings(prop) <> 0 Then
+				Client.writeToLog "Ошибка регистрации сообщения"
+			Else
+				'msgbox "Новое сообщение зарегестрированно"
+				msgbox "Обнаружен алкоголь у "+strNameKPP2s8+" на объекте "+strInitKPP2s8
+			End If
+		End If
+	end if
+'обнуление переменных
+	strInitKPP2s8 = ""
+	strNameKPP2s8 = ""
+	dwCardKPP2s8  = 0
+	set ObjKPP2s8 = Nothing
+end if
+
+'Кпп2 Считыватель 9
+If Evt.strEventTypeID="TApcCardHolderAccess_WillGranted" AND Evt.strInitObjName = "Вход с алкотестером" Then
+	strInitKPP2s9 = Evt.strInitObjName
+	strNameKPP2s9 = Evt.strHolderName
+	dwCardKPP2s9  = Evt.dwCardNumber
+	set ObjKPP2s9 = Evt.SysAddrInitObj
+end if
+If Evt.strEventTypeID = "TAplMCEventStatusChangeLog_AlarmInputAct" AND Evt.strInitObjName = "Вход с алкотестером - Дополнительный вход №1"   Then
+	if strNameKPP2s9 <> "" then
+'Обнаружение алкоголя в выдохе, начало формирования сообщения.
+		If ObjKPP2s9.getEventSettingsForRegister("TApcCardHolderAccess_HostAccReq", prop)  <> 0 Then
+			Client.writeToLog "Ошибка получения настроек сообщения для регистрации"
+		Else
+			prop.isOffLineEvent =false
+			prop.dwCardNumber = dwCardKPP2s9
+			prop.strHolderName = strNameKPP2s9
+			prop.strPIN = "алкоголь"
+			If ObjKPP2s9.registerEventWithSettings(prop) <> 0 Then
+				Client.writeToLog "Ошибка регистрации сообщения"
+			Else
+				'msgbox "Новое сообщение зарегестрированно"
+				msgbox "Обнаружен алкоголь у "+strNameKPP2s9+" на объекте "+strInitKPP2s9
+			End If
+		End If
+	end if
+'обнуление переменных
+	strInitKPP2s9 = ""
+	strNameKPP2s9 = ""
+	dwCardKPP2s9  = 0
+	set ObjKPP2s9 = Nothing
+end if
+
+'Кпп2 Считыватель 10
+If Evt.strEventTypeID="TApcCardHolderAccess_WillGranted" AND Evt.strInitObjName = "Вход с алкотестером" Then
+	strInitKPP2s10 = Evt.strInitObjName
+	strNameKPP2s10 = Evt.strHolderName
+	dwCardKPP2s10  = Evt.dwCardNumber
+	set ObjKPP2s10 = Evt.SysAddrInitObj
+end if
+If Evt.strEventTypeID = "TAplMCEventStatusChangeLog_AlarmInputAct" AND Evt.strInitObjName = "Вход с алкотестером - Дополнительный вход №1"   Then
+	if strNameKPP2s10 <> "" then
+'Обнаружение алкоголя в выдохе, начало формирования сообщения.
+		If ObjKPP2s10.getEventSettingsForRegister("TApcCardHolderAccess_HostAccReq", prop)  <> 0 Then
+			Client.writeToLog "Ошибка получения настроек сообщения для регистрации"
+		Else
+			prop.isOffLineEvent =false
+			prop.dwCardNumber = dwCardKPP2s10
+			prop.strHolderName = strNameKPP2s10
+			prop.strPIN = "алкоголь"
+			If ObjKPP2s10.registerEventWithSettings(prop) <> 0 Then
+				Client.writeToLog "Ошибка регистрации сообщения"
+			Else
+				'msgbox "Новое сообщение зарегестрированно"
+				msgbox "Обнаружен алкоголь у "+strNameKPP2s10+" на объекте "+strInitKPP2s10
+			End If
+		End If
+	end if
+'обнуление переменных
+	strInitKPP2s10 = ""
+	strNameKPP2s10 = ""
+	dwCardKPP2s10  = 0
+	set ObjKPP2s10 = Nothing
+end if
+
+'Кпп2 Считыватель 11
+If Evt.strEventTypeID="TApcCardHolderAccess_WillGranted" AND Evt.strInitObjName = "Вход с алкотестером" Then
+	strInitKPP2s11 = Evt.strInitObjName
+	strNameKPP2s11 = Evt.strHolderName
+	dwCardKPP2s11  = Evt.dwCardNumber
+	set ObjKPP2s11 = Evt.SysAddrInitObj
+end if
+If Evt.strEventTypeID = "TAplMCEventStatusChangeLog_AlarmInputAct" AND Evt.strInitObjName = "Вход с алкотестером - Дополнительный вход №1"   Then
+	if strNameKPP2s11 <> "" then
+'Обнаружение алкоголя в выдохе, начало формирования сообщения.
+		If ObjKPP2s11.getEventSettingsForRegister("TApcCardHolderAccess_HostAccReq", prop)  <> 0 Then
+			Client.writeToLog "Ошибка получения настроек сообщения для регистрации"
+		Else
+			prop.isOffLineEvent =false
+			prop.dwCardNumber = dwCardKPP2s11
+			prop.strHolderName = strNameKPP2s11
+			prop.strPIN = "алкоголь"
+			If ObjKPP2s11.registerEventWithSettings(prop) <> 0 Then
+				Client.writeToLog "Ошибка регистрации сообщения"
+			Else
+				'msgbox "Новое сообщение зарегестрированно"
+				msgbox "Обнаружен алкоголь у "+strNameKPP2s11+" на объекте "+strInitKPP2s11
+			End If
+		End If
+	end if
+'обнуление переменных
+	strInitKPP2s11 = ""
+	strNameKPP2s11 = ""
+	dwCardKPP2s11  = 0
+	set ObjKPP2s11 = Nothing
+end if
+
+'Кпп2 Считыватель 12
+If Evt.strEventTypeID="TApcCardHolderAccess_WillGranted" AND Evt.strInitObjName = "Вход с алкотестером" Then
+	strInitKPP2s12 = Evt.strInitObjName
+	strNameKPP2s12 = Evt.strHolderName
+	dwCardKPP2s12  = Evt.dwCardNumber
+	set ObjKPP2s12 = Evt.SysAddrInitObj
+end if
+If Evt.strEventTypeID = "TAplMCEventStatusChangeLog_AlarmInputAct" AND Evt.strInitObjName = "Вход с алкотестером - Дополнительный вход №1"   Then
+	if strNameKPP2s12 <> "" then
+'Обнаружение алкоголя в выдохе, начало формирования сообщения.
+		If ObjKPP2s12.getEventSettingsForRegister("TApcCardHolderAccess_HostAccReq", prop)  <> 0 Then
+			Client.writeToLog "Ошибка получения настроек сообщения для регистрации"
+		Else
+			prop.isOffLineEvent =false
+			prop.dwCardNumber = dwCardKPP2s12
+			prop.strHolderName = strNameKPP2s12
+			prop.strPIN = "алкоголь"
+			If ObjKPP2s12.registerEventWithSettings(prop) <> 0 Then
+				Client.writeToLog "Ошибка регистрации сообщения"
+			Else
+				'msgbox "Новое сообщение зарегестрированно"
+				msgbox "Обнаружен алкоголь у "+strNameKPP2s12+" на объекте "+strInitKPP2s12
+			End If
+		End If
+	end if
+'обнуление переменных
+	strInitKPP2s12 = ""
+	strNameKPP2s12 = ""
+	dwCardKPP2s12  = 0
+	set ObjKPP2s12 = Nothing
+end if
+
+end sub
